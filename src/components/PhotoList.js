@@ -1,100 +1,80 @@
 import React, { useState, useEffect } from "react";
-//import { nanoid } from "nanoid";
-
-import "../styles/PhotoList.css";
-
 import Photo from "./Photo";
 import AddPhotoPanel from "./AddPhotoPanel";
 
 const PhotoList = () => {
   const [photos, setPhotos] = useState([]);
-  //let page = 0;
-  //const [page, setPage] = useState(0);
-
   const api = "https://api.unsplash.com/search/photos?";
-
   const CLIENT_ID = "t71c8BYO7h97GFwVTzFUpgtgWmMROGc7ncI1kTMmUCE";
 
   useEffect(() => {
-    const savedPhotos = JSON.parse(
-      localStorage.getItem("react-photo-library-app-data")
-    );
+    var savedPhotos = localStorage.getItem("react-photo-library-app-data")
+      ? JSON.parse(localStorage.getItem("react-photo-library-app-data"))
+      : [];
 
-    if (savedPhotos) {
-      setPhotos(savedPhotos);
-    }
+    savedPhotos && setPhotos(savedPhotos);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(
-      "react-photo-library-app-data",
-      JSON.stringify(photos)
-    );
-  }, [photos]);
-
-  // const deletePhoto = (key) => {
-  //   const newPhotos = photos.filter((photo) => photo.key !== key);
-  //   setPhotos(newPhotos);
-  // };
-
-  // const checkStatus = (res) => {
-  //   if (res.status >= 200 && res.status < 300) {
-  //     return res;
-  //   }
-  //   const error = new Error(`HTTP Error ${res.statusText}`);
-  //   error.status = res.statusText;
-  //   error.res = res;
-  //   console.log(error);
-  //   throw error;
-  // };
-
-  // async function AddPhoto(query) {
-  //   let page = Math.floor(Math.random() * 10) + 1;
-  //   let index = Math.floor(Math.random() * 10);
-  //   console.log("adding...");
-  //   const res = await fetch(
-  //     `${api}query=${query}&page=${page}&client_id=${CLIENT_ID}`
-  //   );
-  //   res
-  //     .json()
-  //     .then((data) => {
-  //       console.log(data);
-  //       const newPhoto = data.results[index];
-  //       //console.log(newPhoto.urls.small);
-  //       const newPhotos = [...photos, newPhoto];
-  //       setPhotos(newPhotos);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
-
-  const AddPhoto = (query) => {
+  async function AddPhoto(query) {
     let page = Math.floor(Math.random() * 10) + 1;
     let index = Math.floor(Math.random() * 10);
-    fetch(`${api}query=${query}&page=${page}&client_id=${CLIENT_ID}`, {
-      accept: "application/json",
-    })
-      // .then(checkStatus)
-      .then((res) => res.json())
+    const res = await fetch(
+      `${api}orientation=landscape&query=${query}&page=${page}&client_id=${CLIENT_ID}`
+    );
+    res
+      .json()
       .then((data) => {
-        console.log(data);
-        const newPhoto = data.results[index];
-        //console.log(newPhoto.urls.small);
-        const newPhotos = [...photos, newPhoto];
+        let newPhoto = data.results[index];
+        let newPhotos = [...photos, newPhoto];
         setPhotos(newPhotos);
       })
-      .catch((err) => {
-        console.log("Error Occurred: ", err);
-      });
-  };
+      .catch((err) => console.log(err));
+  }
+
+  const photosArr1 = photos.filter((ei, i) => i % 3 === 0);
+  const photosArr2 = photos.filter((ei, i) => i % 3 === 1);
+  const photosArr3 = photos.filter((ei, i) => i % 3 === 2);
+  console.log(photosArr1);
 
   return (
-    <div>
-      {/* <Photo photo={photos[0].urls.small.url} /> */}
+    <div className="items-center">
       {photos.length > 0 && (
-        <div className="photo-list">
+        <div className="flex flex-row justify-between mx-auto w-[50%]">
+          <div className="w-[100%] my-0 ml-0 mr-1">
+            {photosArr1.map((photo) => (
+              <Photo
+                key={photo.id}
+                photo_url={photo.urls.regular}
+                photo_alt={photo.alt_description}
+              />
+            ))}
+          </div>
+          <div className="w-[100%] my-0 ml-0 mr-1">
+            {photosArr2.map((photo) => (
+              <Photo
+                key={photo.id}
+                photo_url={photo.urls.regular}
+                photo_alt={photo.alt_description}
+              />
+            ))}
+          </div>
+          <div className="w-[100%] my-0 ml-0 mr-1">
+            {photosArr3.map((photo) => (
+              <Photo
+                key={photo.id}
+                photo_url={photo.urls.regular}
+                photo_alt={photo.alt_description}
+              />
+            ))}
+          </div>
+          {/*
           {photos.map((photo) => (
-            <Photo photo={photo} />
-          ))}
+            <Photo
+              key={photo.id}
+              photo_url={photo.urls.regular}
+              photo_alt={photo.alt_description}
+            />
+          ))} */}
         </div>
       )}
       <AddPhotoPanel handleAddPhoto={AddPhoto} />

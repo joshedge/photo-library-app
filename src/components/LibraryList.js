@@ -1,9 +1,8 @@
-import "../styles/LibraryList.css";
 import Library from "./Library";
 
 const LibraryList = () => {
   return (
-    <div className="library-list">
+    <div>
       <Library />
     </div>
   );

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../styles/AddPhotoPanel.css";
 import { MdAddCircleOutline } from "react-icons/md";
 
 const AddPhotoPanel = ({ handleAddPhoto }) => {
@@ -19,14 +18,16 @@ const AddPhotoPanel = ({ handleAddPhoto }) => {
   };
 
   return (
-    <div className="add-photo">
-      <input
-        className="new-photo-input"
-        placeholder="Search for a photo..."
-        value={photoText}
-        onChange={handleChange}
-      ></input>
-      <div className="location-footer">
+    <div className="flex flex-row justify-center w-[100%] items-center">
+      <div className="">
+        <input
+          className=""
+          placeholder="Search for a photo..."
+          value={photoText}
+          onChange={handleChange}
+        ></input>
+      </div>
+      <div className="">
         <MdAddCircleOutline
           onClick={handleAddClick}
           className="add-icon"

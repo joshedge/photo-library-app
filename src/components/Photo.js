@@ -1,23 +1,10 @@
-import "../styles/Photo.css";
-
-const Photo = (photo) => {
-  // if (typeof url !== undefined) {
-  //   //if (Object.keys(url).length !== 0) {
-  //   link = url.urls.small.url;
-  // }
-
-  //console.log(photo.url.urls.regular.url);
+const Photo = (props) => {
+  const url = props.photo_url;
+  const alt = props.photo_alt;
 
   return (
-    //{isLoggedIn ? <HomeLoggedIn /> : <HomeLoggedOut />}
-    <div>
-      {typeof photo !== undefined && (
-        <div className="photo">
-          <div className="photo-frame">
-            <img src={photo.url.urls.small} alt=""></img>
-          </div>
-        </div>
-      )}
+    <div className="mx-0 mb-0 mt-1">
+      <img src={url} alt={alt} width="100%" />
     </div>
   );
 };
