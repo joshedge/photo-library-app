@@ -18,10 +18,10 @@ const AddPhotoPanel = ({ handleAddPhoto }) => {
   };
 
   return (
-    <div className="flex flex-row justify-center w-[100%] items-center">
+    <div className="flex flex-row justify-center w-[100%] items-center mb-8">
       <div className="">
         <input
-          className=""
+          className="border-solid rounded-md border-2 border-emerald-900 py-1 pl-4 mr-4 focus:outline-emerald-700"
           placeholder="Search for a photo..."
           value={photoText}
           onChange={handleChange}
@@ -31,7 +31,7 @@ const AddPhotoPanel = ({ handleAddPhoto }) => {
         <MdAddCircleOutline
           onClick={handleAddClick}
           className="add-icon"
-          size="3em"
+          size="2.75rem"
         />
       </div>
     </div>

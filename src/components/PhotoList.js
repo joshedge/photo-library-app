@@ -8,12 +8,26 @@ const PhotoList = () => {
   const CLIENT_ID = "t71c8BYO7h97GFwVTzFUpgtgWmMROGc7ncI1kTMmUCE";
 
   useEffect(() => {
-    var savedPhotos = localStorage.getItem("react-photo-library-app-data")
-      ? JSON.parse(localStorage.getItem("react-photo-library-app-data"))
-      : [];
+    var savedPhotos = JSON.parse(
+      localStorage.getItem("react-photo-library-app-data")
+    );
 
-    savedPhotos && setPhotos(savedPhotos);
+    if (savedPhotos) {
+      setPhotos(savedPhotos);
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "react-photo-library-app-data",
+      JSON.stringify(photos)
+    );
+  }, [photos]);
+
+  const deletePhoto = (key) => {
+    const newPhotos = photos.filter((photo) => photo.key !== key);
+    setPhotos(newPhotos);
+  };
 
   async function AddPhoto(query) {
     let page = Math.floor(Math.random() * 10) + 1;
@@ -24,7 +38,12 @@ const PhotoList = () => {
     res
       .json()
       .then((data) => {
-        let newPhoto = data.results[index];
+        let newPhotoObj = data.results[index];
+        let newPhoto = {
+          key: newPhotoObj.id,
+          photo_url: newPhotoObj.urls.regular,
+          photo_alt: newPhotoObj.alt_description,
+        };
         let newPhotos = [...photos, newPhoto];
         setPhotos(newPhotos);
       })
@@ -34,50 +53,44 @@ const PhotoList = () => {
   const photosArr1 = photos.filter((ei, i) => i % 3 === 0);
   const photosArr2 = photos.filter((ei, i) => i % 3 === 1);
   const photosArr3 = photos.filter((ei, i) => i % 3 === 2);
-  console.log(photosArr1);
 
   return (
-    <div className="items-center">
+    <div>
+      <AddPhotoPanel handleAddPhoto={AddPhoto} />
       {photos.length > 0 && (
         <div className="flex flex-row justify-between mx-auto w-[50%]">
           <div className="w-[100%] my-0 ml-0 mr-1">
             {photosArr1.map((photo) => (
               <Photo
-                key={photo.id}
-                photo_url={photo.urls.regular}
-                photo_alt={photo.alt_description}
+                id={photo.key}
+                url={photo.photo_url}
+                alt={photo.photo_alt}
+                handleDeleteClick={deletePhoto}
               />
             ))}
           </div>
           <div className="w-[100%] my-0 ml-0 mr-1">
             {photosArr2.map((photo) => (
               <Photo
-                key={photo.id}
-                photo_url={photo.urls.regular}
-                photo_alt={photo.alt_description}
+                id={photo.key}
+                url={photo.photo_url}
+                alt={photo.photo_alt}
+                handleDeleteClick={deletePhoto}
               />
             ))}
           </div>
           <div className="w-[100%] my-0 ml-0 mr-1">
             {photosArr3.map((photo) => (
               <Photo
-                key={photo.id}
-                photo_url={photo.urls.regular}
-                photo_alt={photo.alt_description}
+                id={photo.key}
+                url={photo.photo_url}
+                alt={photo.photo_alt}
+                handleDeleteClick={deletePhoto}
               />
             ))}
           </div>
-          {/*
-          {photos.map((photo) => (
-            <Photo
-              key={photo.id}
-              photo_url={photo.urls.regular}
-              photo_alt={photo.alt_description}
-            />
-          ))} */}
         </div>
       )}
-      <AddPhotoPanel handleAddPhoto={AddPhoto} />
     </div>
   );
 };
