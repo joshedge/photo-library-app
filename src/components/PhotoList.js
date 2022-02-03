@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Photo from "./Photo";
+import Error from "./Error";
 import AddPhotoPanel from "./AddPhotoPanel";
 
 const PhotoList = () => {
   const [photos, setPhotos] = useState([]);
+  const [error, setError] = useState([{ open: false, message: "" }]);
   const api = "https://api.unsplash.com/search/photos?";
   const CLIENT_ID = "t71c8BYO7h97GFwVTzFUpgtgWmMROGc7ncI1kTMmUCE";
 
@@ -47,7 +49,7 @@ const PhotoList = () => {
         let newPhotos = [...photos, newPhoto];
         setPhotos(newPhotos);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError({ open: true, message: err.c }));
   }
 
   const photosArr1 = photos.filter((ei, i) => i % 3 === 0);
@@ -91,6 +93,7 @@ const PhotoList = () => {
           </div>
         </div>
       )}
+      <Error handleSetError={setError} status={error.open} />
     </div>
   );
 };
